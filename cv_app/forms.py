@@ -1,14 +1,26 @@
-# cv_app/forms.py
-
 from django import forms
-from .models import Education, Experience
+from .models import ContactProfile
 
-class EducationForm(forms.ModelForm):
-    class Meta:
-        model = Education
-        fields = ['degree', 'institution', 'graduation_year', 'diploma']
 
-class ExperienceForm(forms.ModelForm):
-    class Meta:
-        model = Experience
-        fields = ['job_title', 'company', 'start_year', 'end_year', 'responsibilities', 'reference_letter']
+class ContactForm(forms.ModelForm):
+
+	name = forms.CharField(max_length=100, required=True,
+		widget=forms.TextInput(attrs={
+			'placeholder': '*Full name..',
+			
+						}))
+	email = forms.EmailField(max_length=254, required=True, 
+		widget=forms.TextInput(attrs={
+			'placeholder': '*Email..',
+			
+						}))
+	message = forms.CharField(max_length=1000, required=True, 
+		widget=forms.Textarea(attrs={
+			'placeholder': '*Message..',
+			'rows': 6,
+			}))
+
+
+	class Meta:
+		model = ContactProfile
+		fields = ('name', 'email', 'message',)
