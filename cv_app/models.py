@@ -62,6 +62,8 @@ class Testimonial(models.Model):
     role = models.CharField(max_length=200, blank=True, null=True)
     quote = models.CharField(max_length=500, blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    references_file = models.FileField(upload_to = 'references/',default='default_reference.pdf')
+
 
     def __str__(self):
         return self.name
@@ -151,6 +153,7 @@ class Certificate(models.Model):
     title = models.CharField(max_length=200, blank=True, null=True)
     description = models.CharField(max_length=500, blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    file_cer = models.FileField(upload_to = 'certificates/',default='default_certificate.pdf')
 
     def __str__(self):
         return self.name

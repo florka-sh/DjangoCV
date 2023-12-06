@@ -37,17 +37,17 @@ Start Content
       <div class="row g-4 g-md-3  align-items-center">
         <div class="col-md-auto order-md-last">
           <div class="bannerUserImg">
-            <img src="{{me.userprofile.avatar.url}}" alt="{{me.first_name|title}} {{me.last_name|title}} avatar">
+            <img src="{{user.userprofile.avatar.url}}" alt="{{user.first_name|title}} {{user.last_name|title}} avatar">
           </div>
         </div>
         <div class="col-md">
           <div class="bannerContent">
-            <h1 class="xlTitle pb-3">Hi, I’m {{me.first_name|title}}, <br> a {{me.userprofile.title}} </br></h1>
-            <p>{{me.userprofile.bio}}</p>
+            <h1 class="xlTitle pb-3">Hi, I’m {{user.first_name|title}}, <br> a {{user.userprofile.title}} </br></h1>
+            <p>{{user.userprofile.bio}}</p>
             <div class="bannerBtnCol">
               <div class="row">
                 <div class="col-auto">
-                  <a download href="{{me.userprofile.cv.url}}" class="btn btnPrimary">Download Resume</a>
+                  <a download href="{{user.userprofile.cv.url}}" class="btn btnPrimary">Download Resume</a>
                 </div>
                 <div class="col-auto">
                   <a href="{% url 'cv_app:contact' %}" class="btn btnOutline">Contact</a>
@@ -68,7 +68,7 @@ Start Content
         <div class="col-md-auto">
           <div class="keySkillCol">
             <h4 class="smTitle pb-3">Key Skills</h4>
-            {% for sk in me.userprofile.skills.all %}
+            {% for sk in user.userprofile.skills.all %}
             {% if sk.is_key_skill %}
             <div class="keySkillCard">
               {% if sk.image %}
@@ -82,12 +82,14 @@ Start Content
             {% endfor %}
           </div>
         </div>
+
+        
         <div class="col-md">
           <h4 class="smTitle pb-3">Coding Skills</h4>
           <div class="progressCol">
             <div class="progressCard">
-              {% for sk in me.userprofile.skills.all %}
-              {% if sk.is_key_skill %}
+              {% for sk in user.userprofile.skills.all %}
+              {% if not sk.is_key_skill %}
               <div class="progressCol">
                 <span class="progressLbl">{{sk.name}}</span>
                 <div class="row g-2 align-items-center">
@@ -118,6 +120,18 @@ Start Content
       <div class="row pb-3">
         <div class="col">
           <h4 class="smText regular">Certificates</h4>
+          {% for certificate in certificates %}
+            {% if certificate.file_cer %}
+                <a href="{{ certificate.file_cer.url }}" target="_blank">
+                    {{ certificate.name }}
+                </a><br>
+            {% else %}
+                No certificate available for {{ certificate.name }}<br>
+            {% endif %}
+          {% endfor %}
+
+      
+
         </div>
 
       </div>
@@ -188,36 +202,50 @@ Start Content
         
       </div>
       <div class="testimonialCol">
-        <h4 class="smText regular d-block">Testimonials</h4>
+        <h4 class="smText regular d-block">References</h4>
         <div class="testimonialSlider">
-          <div class="swiper testimonialSwiper">
-            <div class="swiper-wrapper">
-              {% for t in testimonials %}
-              {% if t.is_active %}
-              <div class="swiper-slide">
-                <div class="testimonialCard">
-                  <div class="row align-items-center">
-                    <div class="col-sm-auto">
-                      <div class="tImgCol">
-                        <img src="{{t.thumbnail.url}}" alt="...">
-                      </div>
-                    </div>
-                    <div class="col-sm">
-                      <div class="tContentCol">
-                        <h4 class="xsTitle bold">{{t.name}} - {{t.role}}</h4>
-                        <p>{{t.quote}}</p>
-                      </div>
-                    </div>
-                  </div>
+            <div class="swiper testimonialSwiper">
+                <div class="swiper-wrapper">
+                    {% for testimonial in testimonials %}
+                        {% if testimonial.is_active %}
+                            <div class="swiper-slide">
+                                <div class="testimonialCard">
+                                    <div class="row align-items-center">
+                                        <div class="col-sm-auto">
+                                            <div class="tImgCol">
+                                                <img src="{{testimonial.thumbnail.url}}" alt="...">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm">
+                                            <div class="tContentCol">
+                                                <h4 class="xsTitle bold">{{ testimonial.name }} - {{ testimonial.role }}</h4>
+                                                <p>{{ testimonial.quote }}</p>
+                                                
+                                                {% for reference in references %}
+                                                    {% if reference.testimonial == testimonial %}
+                                                        {% if reference.references_file %}
+                                                            <a href="{{ reference.references_file.url }}" target="_blank">
+                                                                {{ reference.name }}
+                                                            </a><br>
+                                                        {% else %}
+                                                            No reference available for {{ reference.name }}<br>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
-              </div>
-              {% endif %}
-              {% endfor %}
-
+                <div class="test-swiper-button-next swiper-button-next swiperBtnStyle"></div>
+                <div class="test-swiper-button-prev swiper-button-prev swiperBtnStyle"></div>
             </div>
-            <div class="test-swiper-button-next swiper-button-next swiperBtnStyle"></div>
-            <div class="test-swiper-button-prev swiper-button-prev swiperBtnStyle"></div>
-          </div>
+        </div>
+    </div>
+    
 
 
         </div>

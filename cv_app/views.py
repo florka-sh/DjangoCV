@@ -31,6 +31,7 @@ class IndexView(generic.TemplateView):
 		context["portfolio"] = portfolio
 		return context
 
+	
 
 class ContactView(generic.FormView):
 	template_name = "cv_app/contact.html"
